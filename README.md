@@ -14,15 +14,15 @@ More description is in the document "MyQ Unattended Coding Test 2.5.pdf"
 ## Building
 Build project in maven
 ```
-mvn clean verify
+mvn clean package
 ```
 
 ## Running Program
-After build run created jar file cleaning_robot.java in Java with two arguments.
+Run created jar file cleaning_robot.jar in Java with two arguments.
 * The first argument is path for input json file, which must be provided as input with instructions for robot
 * The second argument is path for output json file, which will be generated as result by program
 ```
-java cleaning_robot <input.json> <output.json>
+java -jar cleaning_robot.jar <input.json> <output.json>
 ```
 
 ## Input JSON Format:
