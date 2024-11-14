@@ -21,7 +21,7 @@ public class CleaningRobot {
     private final List<List<String>> map;
     private int x, y, battery, backOffStrategyLevel;
     private FacingEnum facing;
-    private boolean dropRestSequence, programFinished;
+    private boolean programFinished;
 
     public CleaningRobot(Input input) {
         this.battery = input.getBattery();
@@ -133,8 +133,6 @@ public class CleaningRobot {
     }
 
     private void visitNewPosition(int newX, int newY) {
-        backOffStrategyLevel = 0;
-        dropRestSequence = false;
         x = newX;
         y = newY;
         visitedPositions.add(new Position(x, y));
@@ -146,26 +144,32 @@ public class CleaningRobot {
 
     private void backOffStrategy() {
         backOffStrategyLevel++;
-        dropRestSequence = true;
         switch (backOffStrategyLevel) {
             case 1 -> {
                 turnRight();
                 advance();
-                if (!dropRestSequence) {
+                if (backOffStrategyLevel == 1) {
                     turnLeft();
                 }
             }
-            case 2, 3 -> {
+            case 2 -> {
                 turnRight();
                 advance();
-                if (!dropRestSequence) {
+                if (backOffStrategyLevel == 2) {
+                    turnRight();
+                }
+            }
+            case 3 -> {
+                turnRight();
+                advance();
+                if (backOffStrategyLevel == 3) {
                     turnRight();
                 }
             }
             case 4 -> {
                 turnRight();
                 back();
-                if (!dropRestSequence) {
+                if (backOffStrategyLevel == 4) {
                     turnRight();
                     advance();
                 }
@@ -177,6 +181,7 @@ public class CleaningRobot {
             }
             default -> programFinished = true;
         }
+        backOffStrategyLevel = 0;
     }
 
     private Result getResult() {
